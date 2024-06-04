@@ -33,11 +33,11 @@ def time_to_first_review(reponame, prnumber):
                 #ttfr- time to first review
                 ttfr= review_time-pr_time
                 
-                print(f"Time to first review for PR:", {pr.title}, "is:" ,review_time-pr_time)
+                print(f"Time to first review for PR: {pr.title} is:" ,review_time-pr_time)
                 return ttfr
             
             else:
-                print(f"This PR:",{pr.title}, "has not been reviewed yet.")
+                print(f"This PR: {pr.title} has not been reviewed yet.")
                 return None
         
         except RateLimitExceededException as e:
