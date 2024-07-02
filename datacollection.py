@@ -1,48 +1,49 @@
 from github import Github
 import pandas as pd
+import datetime
 
 #function to get first_x_pulls
-def access(count):
-
+def get_x_pulls(count,reponame):
+    
     access_key="your access key"
     g=Github(access_key,retry=10,timeout=15)
-    reponame="apache/beam" #enter any reponame here
-    repo=g.get_repo(reponame)
+    repo=g.get_repo(f"{reponame}")
     pulls=repo.get_pulls(state='all')
     
     
-    first_x_pulls=[]
+    latest_x_pulls=[]
   
     if(pulls):
         for i in range(count):
-
-            first_x_pulls.append(pulls[i])
-        return first_x_pulls
+            print(pulls[i])
+            latest_x_pulls.append(pulls[i])
+        return latest_x_pulls
 
 #function to get details of the PR
 
-def getDetails(pulls,reponame):
+def get_pull_details(pulls,reponame):
     prtime=None
     reviewtime=None
     ttfr=None
     details=[]
+    dt=datetime.datetime.now()
     
     #print("Length of pulls is", len(pulls))
     
     for pr in pulls:
-            
+        print(pr.title)
         try:
             #if PR has been reviewed             
             comments=pr.get_review_comments()
             prtime=pr.created_at
             reviewtime=comments[0].created_at
             ttfr= reviewtime-prtime
-            details.append([reponame,pr.title,pr.number,prtime,reviewtime,ttfr])
+            details.append([reponame,pr.title,pr.number,prtime,reviewtime,str(ttfr)])
             
 
         except IndexError:
             #PR has not been reviewed 
-            print(f"No review comments in PR #{pr.number}")
+            print(f"No review comments in PR {pr.title} #{pr.number}")
             continue            
                
     return details      
@@ -58,8 +59,8 @@ def datatocsv(details,path_name):
 
 if __name__=='__main__':
     
+    reponame="apache/beam" #change repo name here
     count=20 #change count according to number of Pull Requests you want    
-    first_x=access(count)    
-    details=getDetails(first_x,"Apache/Github")  
-    datatocsv(details,r"C:\Users\My PC\Downloads\githubwrite.csv")
-
+    latest_x=get_x_pulls(count, reponame)    
+    details=get_pull_details(latest_x,reponame)  
+    datatocsv(details,r"enter file path here") #Ex: C:\Users\My PC\Downloads\githubwrite2.csv
