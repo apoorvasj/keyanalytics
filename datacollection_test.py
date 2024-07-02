@@ -12,7 +12,7 @@ class TestDataCollection(unittest.TestCase):
         
         mock_github_object=MagicMock()
         mock_Github.return_value= mock_github_object
-
+        
         PR1=MagicMock(title="Test PR",
                       number=1,
                       created_at=datetime.datetime(2024,6,14,11,29,15))
