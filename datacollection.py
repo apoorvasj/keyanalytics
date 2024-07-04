@@ -64,4 +64,3 @@ if __name__=='__main__':
     latest_x=get_x_pulls(count, reponame, access_key)    
     details=get_pull_details(latest_x,reponame)  
     datatocsv(details,r"enter file path here") #Ex: C:\Users\My PC\Downloads\githubwrite2.csv
-
