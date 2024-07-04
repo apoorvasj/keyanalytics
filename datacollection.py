@@ -3,9 +3,8 @@ import pandas as pd
 import datetime
 
 #function to get first_x_pulls
-def get_x_pulls(count,reponame):
+def get_x_pulls(count,reponame,access_key):  
     
-    access_key="your access key"
     g=Github(access_key,retry=10,timeout=15)
     repo=g.get_repo(f"{reponame}")
     pulls=repo.get_pulls(state='all')
@@ -60,8 +59,9 @@ def datatocsv(details,path_name):
 if __name__=='__main__':
     
     reponame="apache/beam" #change repo name here
-    count=20 #change count according to number of Pull Requests you want    
-    latest_x=get_x_pulls(count, reponame)    
+    count=20 #change count according to number of Pull Requests you want to extract
+    access_key="your access key" #enter your API key here
+    latest_x=get_x_pulls(count, reponame, access_key)    
     details=get_pull_details(latest_x,reponame)  
     datatocsv(details,r"enter file path here") #Ex: C:\Users\My PC\Downloads\githubwrite2.csv
 
