@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import math
 
 #plotting function
 def plot(filename, xlabel, ylabel, title):
@@ -18,37 +19,50 @@ def plot(filename, xlabel, ylabel, title):
     #setting new index for grouping purposes
     df1.set_index('Created_at', inplace=True)
 
-    df1.TTFR= df1.TTFR.dt.total_seconds()/(60*60) #hours conversion
-
+    
+    df1.TTFR= df1.TTFR.dt.total_seconds()/(3600) #hours conversion
+ 
 
     list_week=[]
     list_ttfr=[]
     
     #Group using week
-    df2=df1.groupby([pd.Grouper(freq='W')])
-
-    #The groupby function returns an iterable object which contains the group heading and the grouped dataframe!
+    
+    df2=df1.groupby([pd.Grouper(level=0,freq='168h')])
+    
+    #The groupby function returns an iterable object which contains the group heading and the grouped dataframe
 
     for duration, duration_df in df2:
-        list_ttfr.append(duration_df.TTFR)
-        
+        #print(duration)
+        #print(duration_df)
+        if not duration_df.empty:
+            list_ttfr.append(duration_df.TTFR)
+    
+   
     #grouping to extract the week strings
-    df3=df1.groupby([pd.Grouper(level=0,freq='168h')]).mean()
-
+    df3=df1.groupby([pd.Grouper(level=0,freq='168h')]).median()
+    
     #formatting the dates to look like 06-07 - 06-14
     df3.index = df3.index.map(lambda x: f"{x.strftime('%m-%d')} - {(x + pd.DateOffset(days=7)).strftime('%m-%d')}")
-
+    
     #appending to a list so i can use it as an xtick later on.
-    for i in df3.index:
-        list_week.append(i)
-
+    count=0
+    for index in df3.index:
+        
+        row = df3.loc[index]
+        if not (math.isnan(row[count])):
+            print(index)
+            list_week.append(index)
+    
     #preparing for subplots    
+   
     fig= plt.figure(figsize=(10,7))
     ax = fig.add_axes([0.1,0.1,0.8,0.8])
     bp=ax.boxplot(list_ttfr, flierprops=dict(markeredgecolor='red'))
 
     #change 1,2,3,4 x-ticks to custom x_tick
-    plt.xticks([1,2,3,4],list_week)
+
+    plt.xticks(range(1,len(list_ttfr)+1),list_week)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
@@ -59,12 +73,13 @@ def plot(filename, xlabel, ylabel, title):
     #the below lines were just to check if the median of the groups was correctly matching the boxplots. 
     #uncomment if you wish to verify median for each week.
 
-    df4=df1.groupby([pd.Grouper(freq='W')]).median()
+    df4=df1.groupby([pd.Grouper(freq='168h')]).median()
     print(df4)
+    
 
 if __name__=='__main__':
-    pathname=r"enter path" #Ex: "C:\Users\My PC\Downloads\githubwrite.csv"
-    reponame=r"Apache\beam"     #enter your repo name
+    pathname=r"enter path name" #Ex: "C:\Users\My PC\Downloads\githubwrite.csv"
+    reponame=r"xyz"     #enter your repo name
     xlabel= 'Week'
     ylabel= 'TTFR (hours)'
     title= f'TTFR in the month of June 2024 for Repository {reponame}'
