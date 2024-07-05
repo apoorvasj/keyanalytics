@@ -75,7 +75,7 @@ def plot(filename, xlabel, ylabel, title):
     
 
 if __name__=='__main__':
-    pathname=r"C:\Users\My PC\Downloads\ttfr-ocpp-server.csv" #Ex: "C:\Users\My PC\Downloads\githubwrite.csv"
+    pathname=r"enter path name" #Ex: "C:\Users\My PC\Downloads\githubwrite.csv"
     reponame=r"xyz"     #enter your repo name
     xlabel= 'Week'
     ylabel= 'TTFR (hours)'
