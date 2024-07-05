@@ -18,14 +18,16 @@ def plot(filename, xlabel, ylabel, title):
 
     #setting new index for grouping purposes
     df1.set_index('Created_at', inplace=True)
+
     
     df1.TTFR= df1.TTFR.dt.total_seconds()/(3600) #hours conversion
-    print(df1.TTFR)
+ 
 
     list_week=[]
     list_ttfr=[]
     
     #Group using week
+    
     df2=df1.groupby([pd.Grouper(level=0,freq='168h')])
     
     #The groupby function returns an iterable object which contains the group heading and the grouped dataframe
@@ -53,12 +55,13 @@ def plot(filename, xlabel, ylabel, title):
             list_week.append(index)
     
     #preparing for subplots    
-    
+   
     fig= plt.figure(figsize=(10,7))
     ax = fig.add_axes([0.1,0.1,0.8,0.8])
     bp=ax.boxplot(list_ttfr, flierprops=dict(markeredgecolor='red'))
 
     #change 1,2,3,4 x-ticks to custom x_tick
+
     plt.xticks(range(1,len(list_ttfr)+1),list_week)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)

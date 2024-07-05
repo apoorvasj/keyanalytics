@@ -64,6 +64,7 @@ class TestDataCollection(unittest.TestCase):
         PR1.get_review_comments.return_value= []
         
         mock_pulls=get_x_pulls(1,"Mock Repo","")
+
         pull_details=get_pull_details(mock_pulls, "Mock Repo")
 
         #Empty List if no comments        
@@ -86,6 +87,7 @@ class TestDataCollection(unittest.TestCase):
         y2=comments_PR2[0].created_at
         
         mock_pulls=get_x_pulls(2,"Mock Repo","")
+
         pull_details=get_pull_details(mock_pulls, "Mock Repo")
         
         self.assertEqual(pull_details, 
