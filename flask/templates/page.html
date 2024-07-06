@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>review analytics</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/page.css')}}">
+</head>
+<body>
+    <div class="heading">
+    <h3>Welcome to Review Analytics!</h3>
+    <h4>Input the <u>Repository Name</u> and number of <u>Pull Requests</u> you want to extract from it </h4>
+    </div>
+
+    <div class="container">
+
+    <form action='/collect' method='post'>
+
+    <label> Enter repository name. </label>
+    <input type="text" placeholder="Ex: apache/beam" name="name">
+    <label> Enter number of PRs. </label>
+    <input type="text" placeholder="Ex: 20" name="count">
+
+    <input type="submit">
+    </div>
+
+     </form>
+     {% block body %}
+
+     {% endblock %}
+
+    
+</body>
+</html>
